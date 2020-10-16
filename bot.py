@@ -37,6 +37,11 @@ async def hello(ctx):
 	await ctx.send('Hello')
 
 @bot.command()
+async def ping(ctx):
+	await ctx.send('{}ms'.format(round(bot.latency*1000)))
+
+
+@bot.command()
 async def p(ctx,*args):
 	if 'team' in str(ctx.channel).lower():
 		await pounce_channel.send('{} pounced {}'.format(ctx.author.mention,' '.join(args)))
