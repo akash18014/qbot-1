@@ -23,7 +23,7 @@ async def start(ctx):
 	global pounce_channel
 	print(ctx.author.name)
 	if ctx.author.id != 278051799020339201:
-		ctx.channel.send(f'You cannot use this command.')
+		ctx.channel.send(f'You cannot use this command!')
 		return None
 	for channel in ctx.guild.text_channels:
 		if str(channel) == 'pounce':
