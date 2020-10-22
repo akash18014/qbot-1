@@ -22,6 +22,8 @@ async def on_message(message):
 @bot.command()
 async def start(ctx):
 	global pounce_channel
+	global team_channels
+	team_channels = []
 	print(ctx.author.name)
 	if ctx.author.id not in [278051799020339201,745555850323820545]:
 		ctx.channel.send(f'You cannot use this command!')
