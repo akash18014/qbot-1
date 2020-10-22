@@ -2,13 +2,14 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
-load_dotenv('.env')
+# load_dotenv('.env')
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='.')
 
 pounce_channel = None
+team_channels = []
 
 '''@bot.event
 async def on_message(message):
@@ -22,14 +23,14 @@ async def on_message(message):
 async def start(ctx):
 	global pounce_channel
 	print(ctx.author.name)
-	if ctx.author.id != 278051799020339201:
+	if ctx.author.id not in [278051799020339201,745555850323820545]:
 		ctx.channel.send(f'You cannot use this command!')
-		return None
 	for channel in ctx.guild.text_channels:
 		if str(channel) == 'pounce':
 			pounce_channel = channel
 			await pounce_channel.send(f'Pounce channel initialised')
-			return None
+		if 'team' in str(channel):
+			team_channels.append(channel)
 
 
 @bot.command(name='hello')
@@ -48,6 +49,15 @@ async def p(ctx,*args):
 		await ctx.channel.send('{} pounced {} and has been sent!'.format(ctx.author.mention,' '.join(args)))
 	else:
 		await ctx.channel.send('Need to be in a team text channel to pounce!')
+
+
+@bot.command()
+async def hint(ctx,*args):
+	if ctx.author.id not in [278051799020339201,745555850323820545]:
+		await ctx.channel.send(f'You cannot use this command!')
+	else:
+		for channel in team_channels:
+			await channel.send("**HINT : {}**".format(' '.join(args)))
 
 bot.run(DISCORD_TOKEN)
 '''
