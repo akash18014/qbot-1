@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 # load_dotenv('.env')
 
@@ -11,6 +11,7 @@ bot = commands.Bot(command_prefix='.')
 pounce_channel = None
 team_channels = []
 
+CAN_POUNCE = False
 '''@bot.event
 async def on_message(message):
 	print(str(message.guild))
@@ -46,11 +47,15 @@ async def ping(ctx):
 
 @bot.command()
 async def p(ctx,*args):
-	if 'team' in str(ctx.channel).lower():
-		await pounce_channel.send('{} pounced {}'.format(ctx.author.mention,' '.join(args)))
-		await ctx.channel.send('{} pounced {} and has been sent!'.format(ctx.author.mention,' '.join(args)))
+	if CAN_POUNCE:
+		if 'team' in str(ctx.channel).lower():
+			team_no = str(ctx.channel).split('-')[1]
+			await pounce_channel.send('{} from Team {} pounced {}'.format(ctx.author.mention, team_no, ' '.join(args)))
+			await ctx.channel.send('{} pounced {} and has been sent!'.format(ctx.author.mention,' '.join(args)))
+		else:
+			await ctx.channel.send('Need to be in a team text channel to pounce!')
 	else:
-		await ctx.channel.send('Need to be in a team text channel to pounce!')
+		await ctx.channel.send('{} pounce is closed!'.format(ctx.author.mention))
 
 
 @bot.command()
@@ -60,6 +65,48 @@ async def hint(ctx,*args):
 	else:
 		for channel in team_channels:
 			await channel.send("**HINT : {}**".format(' '.join(args)))
+
+
+@bot.command()
+async def sp(ctx,*args):
+	global CAN_POUNCE
+	CAN_POUNCE = True
+	if ctx.author.id not in [278051799020339201,745555850323820545]:
+		await ctx.channel.send(f'You cannot use this command!')
+	else:
+		for channel in team_channels:
+			await channel.send('**Pounce is open!**')
+
+
+@bot.command()
+async def cp(ctx,*args):
+	global CAN_POUNCE
+	CAN_POUNCE = False
+	if ctx.author.id not in [278051799020339201,745555850323820545]:
+		await ctx.channel.send(f'You cannot use this command!')
+	else:
+		for channel in team_channels:
+			await channel.send('**Pounce is closed!**')
+
+@bot.command()
+async def clues(ctx,*args):
+	team_no = str(ctx.channel).split('-')[1]
+	await pounce_channel.send('Team {} wants a clue!'.format(team_no))
+
+@bot.command()
+async def object(ctx,*args):
+	team_no = str(ctx.channel).split('-')[1]
+	await pounce_channel.send('Team {} objects to clues!'.format(team_no))
+
+
+@bot.command()
+async def sendq(ctx,*args):
+	with open(args[1] + '.png','rb') as fp:
+		for channel in team_channels:
+			await channel.send('Q{} : '.format(args[0]), file = discord.File(fp,args[1]+'.png'))
+			fp.seek(0)
+
+
 
 bot.run(DISCORD_TOKEN)
 '''
