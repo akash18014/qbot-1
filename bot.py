@@ -9,21 +9,16 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 bot = commands.Bot(command_prefix='.')
 
 pounce_channel = None
+general_channel = None
 team_channels = []
 
 CAN_POUNCE = False
-'''@bot.event
-async def on_message(message):
-	print(str(message.guild))
-	channel = bot.get_channel(766579138630778912)
-	valid_channels=["commands"]
-	if str(message.channel) in valid_channels:
-		await channel.send(f'{message.author.mention} said \'{message.content}\' in {message.channel}')
-'''
+
 @bot.command()
 async def start(ctx):
 	global pounce_channel
 	global team_channels
+	global general_channel
 	team_channels = []
 	print(ctx.author.name)
 	if ctx.author.id not in [278051799020339201,745555850323820545]:
@@ -32,6 +27,9 @@ async def start(ctx):
 		if str(channel) == 'pounce':
 			pounce_channel = channel
 			await pounce_channel.send(f'Pounce channel initialised')
+		if str(channel) == 'general':
+			general_channel = channel
+			await general_channel.send(f'General channel initialised')
 		if 'team' in str(channel):
 			team_channels.append(channel)
 
@@ -97,14 +95,6 @@ async def clues(ctx,*args):
 async def object(ctx,*args):
 	team_no = str(ctx.channel).split('-')[1]
 	await pounce_channel.send('Team {} objects to clues!'.format(team_no))
-
-
-@bot.command()
-async def sendq(ctx,*args):
-	with open(args[1] + '.png','rb') as fp:
-		for channel in team_channels:
-			await channel.send('Q{} : '.format(args[0]), file = discord.File(fp,args[1]+'.png'))
-			fp.seek(0)
 
 
 
