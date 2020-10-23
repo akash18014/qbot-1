@@ -18,7 +18,6 @@ CAN_POUNCE = False
 async def start(ctx):
 	global pounce_channel
 	global team_channels
-	global general_channel
 	team_channels = []
 	print(ctx.author.name)
 	if ctx.author.id not in [278051799020339201,745555850323820545]:
@@ -27,9 +26,6 @@ async def start(ctx):
 		if str(channel) == 'pounce':
 			pounce_channel = channel
 			await pounce_channel.send(f'Pounce channel initialised')
-		if str(channel) == 'general':
-			general_channel = channel
-			await general_channel.send(f'General channel initialised')
 		if 'team' in str(channel):
 			team_channels.append(channel)
 
