@@ -37,6 +37,7 @@ async def on_command_error(ctx,error):
 async def hello(ctx):
 	await ctx.send('Hello')
 
+
 @bot.command()
 async def ping(ctx):
 	await ctx.send('{}ms'.format(round(bot.latency*1000)))
@@ -92,6 +93,7 @@ async def clues(ctx,*args):
 	team_no = str(ctx.channel).split('-')[1]
 	await pounce_channel.send('Team {} wants a clue!'.format(team_no))
 
+
 @bot.command()
 async def object(ctx,*args):
 	team_no = str(ctx.channel).split('-')[1]
@@ -100,32 +102,3 @@ async def object(ctx,*args):
 
 
 bot.run(DISCORD_TOKEN)
-'''
-
-import os
-import random
-
-from discord.ext import commands
-from dotenv import load_dotenv
-
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
-
-bot = commands.Bot(command_prefix='!')
-
-@bot.command(name='99', help='Responds with a random quote from Brooklyn 99')
-async def nine_nine(ctx):
-    brooklyn_99_quotes = [
-        'I\'m the human form of the 💯 emoji.',
-        'Bingpot!',
-        (
-            'Cool. Cool cool cool cool cool cool cool, '
-            'no doubt no doubt no doubt no doubt.'
-        ),
-    ]
-
-    response = random.choice(brooklyn_99_quotes)
-    await ctx.send(response)
-
-bot.run(TOKEN)
-'''
