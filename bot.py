@@ -12,22 +12,25 @@ pounce_channel = None
 general_channel = None
 team_channels = []
 
-CAN_POUNCE = False
+CAN_POUNCE = True
 
 @bot.command()
+@commands.has_role('QM')
 async def start(ctx):
 	global pounce_channel
 	global team_channels
 	team_channels = []
-	print(ctx.author.name)
-	if ctx.author.id not in [278051799020339201,745555850323820545]:
-		ctx.channel.send(f'You cannot use this command!')
 	for channel in ctx.guild.text_channels:
 		if str(channel) == 'pounce':
 			pounce_channel = channel
 			await pounce_channel.send(f'Pounce channel initialised')
 		if 'team' in str(channel):
 			team_channels.append(channel)
+
+@bot.event
+async def on_command_error(ctx,error):
+	if isinstance(error,commands.MissingRole):
+		await ctx.send('You do not have the required role!')
 
 
 @bot.command(name='hello')
@@ -38,6 +41,14 @@ async def hello(ctx):
 async def ping(ctx):
 	await ctx.send('{}ms'.format(round(bot.latency*1000)))
 
+
+@bot.command()
+async def join(ctx,*args):
+    team_no = args[0]
+    role_name = "team-"+team_no
+    testrole = discord.utils.find(lambda r: r.name == role_name, ctx.guild.roles)
+    await ctx.send('{} joined Team {}'.format(ctx.author.mention,team_no))
+    await ctx.author.add_roles(testrole)
 
 @bot.command()
 async def p(ctx,*args):
@@ -53,34 +64,28 @@ async def p(ctx,*args):
 
 
 @bot.command()
+@commands.has_role('QM')
 async def hint(ctx,*args):
-	if ctx.author.id not in [278051799020339201,745555850323820545]:
-		await ctx.channel.send(f'You cannot use this command!')
-	else:
-		for channel in team_channels:
-			await channel.send("**HINT : {}**".format(' '.join(args)))
+	for channel in team_channels:
+		await channel.send("**HINT : {}**".format(' '.join(args)))
 
 
 @bot.command()
+@commands.has_role('QM')
 async def sp(ctx,*args):
 	global CAN_POUNCE
 	CAN_POUNCE = True
-	if ctx.author.id not in [278051799020339201,745555850323820545]:
-		await ctx.channel.send(f'You cannot use this command!')
-	else:
-		for channel in team_channels:
-			await channel.send('**Pounce is open!**')
+	for channel in team_channels:
+		await channel.send('**Pounce is open!**')
 
 
 @bot.command()
+@commands.has_role('QM')
 async def cp(ctx,*args):
 	global CAN_POUNCE
 	CAN_POUNCE = False
-	if ctx.author.id not in [278051799020339201,745555850323820545]:
-		await ctx.channel.send(f'You cannot use this command!')
-	else:
-		for channel in team_channels:
-			await channel.send('**Pounce is closed!**')
+	for channel in team_channels:
+		await channel.send('**Pounce is closed!**')
 
 @bot.command()
 async def clues(ctx,*args):
