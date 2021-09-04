@@ -6,7 +6,9 @@ import os
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-bot = commands.Bot(command_prefix='.')
+intents = discord.Intents.all()
+
+bot = commands.Bot(command_prefix='.',intents=intents)
 
 pounce_channel = None
 general_channel = None
@@ -99,6 +101,68 @@ async def object(ctx,*args):
 	team_no = str(ctx.channel).split('-')[1]
 	await pounce_channel.send('Team {} objects to clues!'.format(team_no))
 
+
+@bot.event
+async def on_raw_reaction_add(payload):
+	msg_id = payload.message_id
+
+	roleDict = {"1️⃣":"1","2️⃣":"2","3️⃣":"3","4️⃣":"4","5️⃣":"5","6️⃣":"6","7️⃣":"7","8️⃣":"8","9️⃣":"9"}
+	print(msg_id)
+	if msg_id == 883600051673399297:
+		guild_id = payload.guild_id
+		print(guild_id)
+		guild = discord.utils.find(lambda g: g.id== guild_id,bot.guilds)
+		print("here")
+		print("team-"+roleDict[payload.emoji.name])
+		role = discord.utils.get(guild.roles,name="team-"+roleDict[payload.emoji.name])
+
+		if role is not None:
+			for i in guild.members:
+				print(i.name,i.id)
+			print(payload.user_id)
+
+			member = guild.get_member(payload.user_id)
+			print(member.roles)
+			if member is not None and len(member.roles)==1:
+				await member.add_roles(role)
+				print("done")
+			else:
+				print("member not found")
+		else:
+			print("Role not found")
+
+		print("end")
+
+
+@bot.event
+async def on_raw_reaction_remove(payload):
+	msg_id = payload.message_id
+
+	roleDict = {"1️⃣":"1","2️⃣":"2","3️⃣":"3","4️⃣":"4","5️⃣":"5","6️⃣":"6","7️⃣":"7","8️⃣":"8","9️⃣":"9"}
+	print(msg_id)
+	if msg_id == 883600051673399297:
+		guild_id = payload.guild_id
+		print(guild_id)
+		guild = discord.utils.find(lambda g: g.id== guild_id,bot.guilds)
+		print("here")
+		print("team-"+roleDict[payload.emoji.name])
+		role = discord.utils.get(guild.roles,name="team-"+roleDict[payload.emoji.name])
+
+		if role is not None:
+			for i in guild.members:
+				print(i.name,i.id)
+			print(payload.user_id)
+
+			member = guild.get_member(payload.user_id)
+			if member is not None:
+				await member.remove_roles(role)
+				print("done")
+			else:
+				print("member not found")
+		else:
+			print("Role not found")
+
+		print("end")
 
 
 bot.run(DISCORD_TOKEN)
