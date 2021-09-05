@@ -108,7 +108,7 @@ async def on_raw_reaction_add(payload):
 
 	roleDict = {"1️⃣":"1","2️⃣":"2","3️⃣":"3","4️⃣":"4","5️⃣":"5","6️⃣":"6","7️⃣":"7","8️⃣":"8","9️⃣":"9"}
 	print(msg_id)
-	if msg_id == 884038626424533012:
+	if msg_id == 884048131233292319:
 		guild_id = payload.guild_id
 		print(guild_id)
 		guild = discord.utils.find(lambda g: g.id== guild_id,bot.guilds)
@@ -140,7 +140,7 @@ async def on_raw_reaction_remove(payload):
 
 	roleDict = {"1️⃣":"1","2️⃣":"2","3️⃣":"3","4️⃣":"4","5️⃣":"5","6️⃣":"6","7️⃣":"7","8️⃣":"8","9️⃣":"9"}
 	print(msg_id)
-	if msg_id == 884038626424533012:
+	if msg_id == 884048131233292319:
 		guild_id = payload.guild_id
 		print(guild_id)
 		guild = discord.utils.find(lambda g: g.id== guild_id,bot.guilds)
