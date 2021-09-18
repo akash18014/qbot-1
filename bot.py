@@ -12,6 +12,8 @@ bot = commands.Bot(command_prefix='.',intents=intents)
 
 pounce_channel = None
 general_channel = None
+role_channel = None
+role_message_id = None
 team_channels = []
 
 CAN_POUNCE = True
@@ -28,6 +30,24 @@ async def start(ctx):
 			await pounce_channel.send(f'Pounce channel initialised')
 		if 'team' in str(channel):
 			team_channels.append(channel)
+
+
+@bot.command()
+@commands.has_role('QM')
+async def rolemsg(ctx):
+	global role_channel
+	global role_message_id
+	for channel in ctx.guild.text_channels:
+		if str(channel) == 'roles':
+			role_channel = channel
+			role_message = await role_channel.send(f'Get your team roles by reacting to this message!')
+			role_message_id = role_message.id
+			role_list = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"]
+
+			for emoji in role_list:
+				await role_message.add_reaction(emoji)
+
+
 
 @bot.event
 async def on_command_error(ctx,error):
@@ -108,7 +128,7 @@ async def on_raw_reaction_add(payload):
 
 	roleDict = {"1️⃣":"1","2️⃣":"2","3️⃣":"3","4️⃣":"4","5️⃣":"5","6️⃣":"6","7️⃣":"7","8️⃣":"8","9️⃣":"9"}
 	print(msg_id)
-	if msg_id == 884048131233292319:
+	if msg_id == role_message_id:
 		guild_id = payload.guild_id
 		print(guild_id)
 		guild = discord.utils.find(lambda g: g.id== guild_id,bot.guilds)
@@ -117,9 +137,6 @@ async def on_raw_reaction_add(payload):
 		role = discord.utils.get(guild.roles,name="team-"+roleDict[payload.emoji.name])
 
 		if role is not None:
-			for i in guild.members:
-				print(i.name,i.id)
-			print(payload.user_id)
 
 			member = guild.get_member(payload.user_id)
 			print(member.roles)
@@ -140,7 +157,7 @@ async def on_raw_reaction_remove(payload):
 
 	roleDict = {"1️⃣":"1","2️⃣":"2","3️⃣":"3","4️⃣":"4","5️⃣":"5","6️⃣":"6","7️⃣":"7","8️⃣":"8","9️⃣":"9"}
 	print(msg_id)
-	if msg_id == 884048131233292319:
+	if msg_id == role_message_id:
 		guild_id = payload.guild_id
 		print(guild_id)
 		guild = discord.utils.find(lambda g: g.id== guild_id,bot.guilds)
@@ -149,9 +166,6 @@ async def on_raw_reaction_remove(payload):
 		role = discord.utils.get(guild.roles,name="team-"+roleDict[payload.emoji.name])
 
 		if role is not None:
-			for i in guild.members:
-				print(i.name,i.id)
-			print(payload.user_id)
 
 			member = guild.get_member(payload.user_id)
 			if member is not None:
