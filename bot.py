@@ -78,7 +78,7 @@ async def p(ctx,*args):
 	if CAN_POUNCE:
 		if 'team' in str(ctx.channel).lower():
 			team_no = str(ctx.channel).split('-')[1]
-			await pounce_channel.send('{} from Team {} pounced {}'.format(ctx.author.mention, team_no, ' '.join(args)))
+			await pounce_channel.send('{} from {} pounced {}'.format(ctx.author.mention, discord.utils.get(ctx.guild.roles,name="team-"+team_no).mention, ' '.join(args)))
 			await ctx.channel.send('{} pounced {} and has been sent!'.format(ctx.author.mention,' '.join(args)))
 		else:
 			await ctx.channel.send('Need to be in a team text channel to pounce!')
