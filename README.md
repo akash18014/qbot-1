@@ -7,7 +7,8 @@ A simple discord bot for help with online quizzing.
 - The quizmaster needs to be assigned a ```QM``` role.
 - Roles for each team in the format ```team-{number}```. For example, ```team-1```, ```team-2```. 
     - Private team text and voice channels in the same format mentioned above that require the specific role for access.
-- A ```pounce``` channel 
+- A ```pounce``` channel.
+- A ```roles``` channel. 
 
 ## Commands
 
@@ -15,6 +16,7 @@ The prefix for the commands is a fullstop ```.```
 
 ### QM Commands
 - ```start``` - Sets up the pounce and team channels
+- ```rolemsg``` - Sends a message to the roles channel and reacts to it with number emojis (1️⃣ to 9️⃣). Participants can react with their team number to be assigned the ```team-{number}``` role for access to the respective voice and text channels for that team.
 - ```sp``` - Start Pounce to enable pounces.
 - ```cp``` - Close Pounce to disable pounces.
     - By default, **pounce is enabled**.
